@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Post,
   Request,
@@ -8,8 +9,8 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { SanitizeMongooseModelInterceptor } from 'nestjs-mongoose-exclude';
 import { AuthService } from 'src/auth/services/auth/auth.service';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
-@UseGuards(AuthGuard('local'))
 @UseInterceptors(
   new SanitizeMongooseModelInterceptor({
     excludeMongooseId: true,
@@ -24,5 +25,10 @@ export class AuthController {
   @Post('login')
   login(@Request() req) {
     return this.authService.generateJWT(req.user);
+  }
+
+  @Post('register')
+  register(@Body() createUserDto: CreateUserDto) {
+    return this.authService.register(createUserDto);
   }
 }
