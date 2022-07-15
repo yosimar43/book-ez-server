@@ -1,7 +1,11 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { ClassroomDocument } from './entities/classroom.entity';
+import { Classroom, ClassroomDocument } from './entities/classroom.entity';
 
 import { CreateClassroomDto } from './dto/create-classroom.dto';
 import { UpdateClassroomDto } from './dto/update-classroom.dto';
@@ -20,7 +24,9 @@ export class ClassroomsService {
       updatedAt: new Date(),
     };
 
-    const createClassRoom = await this.ClassroomModel.create(newClassroom);
+    const createClassRoom: Classroom = await this.ClassroomModel.create(
+      newClassroom,
+    );
 
     if (!createClassRoom)
       throw new InternalServerErrorException('Classroom no created');
@@ -28,19 +34,41 @@ export class ClassroomsService {
     return createClassRoom;
   }
 
-  findAll() {
-    return `This action returns all classrooms`;
+  async findAll() {
+    const classrooms = await this.ClassroomModel.find();
+
+    return classrooms;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} classroom`;
+  async findOne(id: string) {
+    const classroom = await this.ClassroomModel.findById(id);
+
+    if (!classroom) throw new NotFoundException('Classroom no found');
+
+    return classroom;
   }
 
-  update(id: number, updateClassroomDto: UpdateClassroomDto) {
-    return `This action updates a #${id} classroom`;
+  async update(id: string, updateClassroomDto: UpdateClassroomDto) {
+    const classroom = await this.ClassroomModel.findByIdAndUpdate(
+      id,
+      {
+        $set: updateClassroomDto,
+      },
+      {
+        new: true,
+      },
+    );
+
+    if (!classroom) throw new NotFoundException('Classroom no found');
+
+    return classroom;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} classroom`;
+  async remove(id: string) {
+    const classroom = await this.ClassroomModel.findByIdAndRemove(id);
+
+    if (!classroom) throw new NotFoundException('Classroom no found');
+
+    return classroom;
   }
 }

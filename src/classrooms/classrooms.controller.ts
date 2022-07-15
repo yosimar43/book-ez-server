@@ -1,14 +1,15 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { IsMongoIdPipe } from 'src/common/pipes/is-mongo-id.pipe';
 import { ClassroomsService } from './classrooms.service';
 import { CreateClassroomDto } from './dto/create-classroom.dto';
 import { UpdateClassroomDto } from './dto/update-classroom.dto';
@@ -29,20 +30,20 @@ export class ClassroomsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.classroomsService.findOne(+id);
+  findOne(@Param('id', IsMongoIdPipe) id: string) {
+    return this.classroomsService.findOne(id);
   }
 
   @Patch(':id')
   update(
-    @Param('id') id: string,
+    @Param('id', IsMongoIdPipe) id: string,
     @Body() updateClassroomDto: UpdateClassroomDto,
   ) {
-    return this.classroomsService.update(+id, updateClassroomDto);
+    return this.classroomsService.update(id, updateClassroomDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.classroomsService.remove(+id);
+  remove(@Param('id', IsMongoIdPipe) id: string) {
+    return this.classroomsService.remove(id);
   }
 }

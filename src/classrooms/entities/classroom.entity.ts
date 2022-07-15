@@ -6,8 +6,7 @@ export type ClassroomDocument = Classroom & Document;
 
 @Schema({ versionKey: false, timestamps: true })
 export class Classroom {
-  @Prop({ required: true, unique: true })
-  classroomId: string;
+  id: string;
   @Prop({ required: true })
   userId: string;
   @Prop({ required: true })

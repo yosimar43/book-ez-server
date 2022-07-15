@@ -5,8 +5,7 @@ export type TaskDocument = Task & Document;
 
 @Schema({ versionKey: false, timestamps: true })
 export class Task {
-  @Prop({ required: true })
-  id: number;
+  id: string;
   @Prop({ required: true })
   classroomId: number;
   @Prop({ required: true })

@@ -12,10 +12,6 @@ export class CreateClassroomDto {
   @IsString()
   userId: string;
 
-  @IsNotEmpty()
-  @IsString()
-  classroomId: string;
-
   @IsArray({ message: 'Task must be an array' })
   @ValidateNested({ each: true, message: 'Task not contain correct property' })
   @Type(() => CreateTaskDto)
