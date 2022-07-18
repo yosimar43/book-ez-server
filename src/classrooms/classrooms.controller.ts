@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Request,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
@@ -15,7 +16,7 @@ import { CreateClassroomDto } from './dto/create-classroom.dto';
 import { UpdateClassroomDto } from './dto/update-classroom.dto';
 
 @UseGuards(AuthGuard('jwt'))
-@Controller('classrooms')
+@Controller(':userId/classrooms')
 export class ClassroomsController {
   constructor(private readonly classroomsService: ClassroomsService) {}
 
@@ -25,8 +26,8 @@ export class ClassroomsController {
   }
 
   @Get()
-  findAll() {
-    return this.classroomsService.findAll();
+  findAll(@Param('userId') userId: string) {
+    return this.classroomsService.findAll(userId);
   }
 
   @Get(':id')

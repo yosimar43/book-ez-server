@@ -34,8 +34,10 @@ export class ClassroomsService {
     return createClassRoom;
   }
 
-  async findAll() {
-    const classrooms = await this.ClassroomModel.find();
+  async findAll(id: string) {
+    const classrooms = await this.ClassroomModel.find({
+      userId: id,
+    });
 
     return classrooms;
   }
